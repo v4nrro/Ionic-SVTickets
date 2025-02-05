@@ -1,84 +1,181 @@
-import { Component, DestroyRef, effect, inject, input, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonList,
+  IonLabel,
+  IonItem,
+  IonText,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonButton,
+  IonSearchbar,
+  IonIcon,
+  IonImg,
+  IonInput,
+  IonTextarea,
+} from '@ionic/angular/standalone';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { EventsService } from '../services/events.service';
-import { minDateValidator } from 'src/app/shared/validators/min-date.validator';
 import { ValidationClassesDirective } from 'src/app/shared/directives/validation-classes.directive';
-import { EncodeBase64Directive } from 'src/app/shared/directives/encode-base64.directive';
+import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator';
+import { Camera, CameraSource, CameraResultType } from '@capacitor/camera';
+import { SearchResult } from '../../shared/ol-maps/interfaces/search-result';
+import { Geolocation } from '@capacitor/geolocation';
+import { GaAutocompleteDirective } from 'src/app/shared/ol-maps/ga-autocomplete.directive';
+import { OlMapDirective } from 'src/app/shared/ol-maps/ol-map.directive';
+import { OlMarkerDirective } from 'src/app/shared/ol-maps/ol-marker.directive';
 
 @Component({
   selector: 'app-event-form',
   templateUrl: './event-form.page.html',
   styleUrls: ['./event-form.page.scss'],
   standalone: true,
-  imports: [ValidationClassesDirective, ReactiveFormsModule, DatePipe, EncodeBase64Directive, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [
+    IonTextarea,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonInput,
+    IonImg,
+    IonIcon,
+    IonLabel,
+    IonButton,
+    RouterLink,
+    IonItem,
+    IonList,
+    ReactiveFormsModule,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    OlMapDirective,
+    OlMarkerDirective,
+  ],
 })
 export class EventFormPage implements OnInit {
+  #eventsService = inject(EventsService);
+  #destroyRef = inject(DestroyRef);
+  #router = inject(Router);
+  #saved = false;
+  #changeDetector = inject(ChangeDetectorRef);
 
-    #eventsService = inject(EventsService);
-    #destroyRef = inject(DestroyRef);
-    #router = inject(Router);
-    #saved = false;
-    #fb = inject(NonNullableFormBuilder);
-  
-    coordinates = signal<[number, number]>([-0.5, 38.5]);
-    address = signal<string>('');
-  
-    // changePlace(result: SearchResult) {
-    //   this.coordinates.set(result.coordinates);
-    //   this.address.set(result.address);
-    // }
-  
-    minDate = new Date().toISOString().substring(0, 10);
-  
-    eventForm = this.#fb.group({
-      title: ['',
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.pattern('^[a-zA-Z][a-zA-Z ]*$'),
-        ],
-      ],
-      description: ['', [Validators.required, Validators.minLength(5)]],
-      price: [0, [Validators.required, Validators.min(0.1)]],
-      image: ['', [Validators.required]],
-      date: ['', [Validators.required, minDateValidator(this.minDate)]],
+  coordinates = signal<[number, number]>([-0.5, 38.5]);
+  address = signal<string>('Prueba');
+  validInputId = false;
+
+  @ViewChild(IonSearchbar) searchBar!: IonSearchbar;
+
+  constructor() {
+    this.getPosition();
+  }
+
+  async getPosition() {
+    const coordinates = await Geolocation.getCurrentPosition();
+    this.coordinates.set([
+      coordinates.coords.longitude,
+      coordinates.coords.latitude,
+    ]);
+  }
+
+  startNavigation() {
+    LaunchNavigator.navigate(this.coordinates().reverse());
+  }
+
+  changePlace(result: SearchResult) {
+    this.coordinates.set(result.coordinates);
+    this.address.set(result.address);
+  }
+
+  myEvent = {
+    title: '',
+    description: '',
+    price: 1,
+    date: '',
+  };
+
+  minDate = new Date().toISOString().substring(0, 10);
+  imageBase64 = '';
+
+  ngOnInit() {}
+
+  //   canDeactivate() {
+  //     if (this.#saved || this.eventForm.pristine) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+
+  addEvent() {
+    console.log(
+      this.myEvent.title,
+      this.myEvent.date,
+      this.myEvent.description,
+      this.myEvent.price,
+      this.imageBase64,
+      this.coordinates()[1],
+      this.coordinates()[0],
+      this.address()
+    );
+    this.#eventsService
+      .addEvent({
+        title: this.myEvent.title,
+        date: this.myEvent.date,
+        description: this.myEvent.description,
+        price: this.myEvent.price,
+        image: this.imageBase64,
+        lat: this.coordinates()[1],
+        lng: this.coordinates()[0],
+        address: this.address(),
+      })
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => {
+        this.#saved = true;
+        this.#router.navigate(['/events']);
+      });
+  }
+
+  async takePhoto() {
+    const photo = await Camera.getPhoto({
+      source: CameraSource.Camera,
+      quality: 90,
+      height: 768,
+      width: 1024,
+      allowEditing: true,
+      resultType: CameraResultType.DataUrl, // Base64 (url encoded)
     });
-    imageBase64 = '';
-  
-    constructor(){
 
-    }
+    this.imageBase64 = photo.dataUrl as string;
+    this.#changeDetector.markForCheck();
+  }
 
-    ngOnInit() {
+  async pickFromGallery() {
+    const photo = await Camera.getPhoto({
+      source: CameraSource.Photos,
+      height: 768,
+      width: 1024,
+      allowEditing: true,
+      resultType: CameraResultType.DataUrl, // Base64 (url encoded)
+    });
 
-    }
-  
-    canDeactivate() {
-      if (this.#saved || this.eventForm.pristine){
-          return true
-      }
-      else{
-        return false;
-      }
-    }
-  
-    addEvent() {
-      this.#eventsService
-        .addEvent({
-          ...this.eventForm.getRawValue(),
-          image: this.imageBase64,
-          lat: this.coordinates()[1],
-          lng: this.coordinates()[0],
-          address: this.address(),
-        })
-        .pipe(takeUntilDestroyed(this.#destroyRef))
-        .subscribe(() => {
-          this.#saved = true;
-          this.#router.navigate(['/events']);
-        });
-    }
+    this.imageBase64 = photo.dataUrl as string;
+    this.#changeDetector.markForCheck();
+  }
 }

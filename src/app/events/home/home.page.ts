@@ -13,7 +13,7 @@ import { add } from 'ionicons/icons';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonSearchbar ,IonInfiniteScrollContent, IonInfiniteScroll, EventCardComponent, CurrencyPipe, RouterLink, IonRouterLink, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabButton, IonIcon, IonList, IonItem, IonThumbnail,IonLabel, IonButton]
+  imports: [IonSearchbar ,IonInfiniteScrollContent, IonInfiniteScroll, EventCardComponent, RouterLink, IonRouterLink, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabButton, IonIcon, IonList]
 })
 export class HomePage {
   events = signal<MyEvent[]>([]);

@@ -16,7 +16,7 @@
           <ion-list>
             @for (p of appPages; track $index) {
               <ion-menu-toggle auto-hide="false">
-                <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+                <ion-item routerDirection="root" [routerLinkActiveOptions]="{exact: true}" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
                   <ion-icon aria-hidden="true" slot="start" [name]="p.icon"></ion-icon>
                   <ion-label>{{ p.title }}</ion-label>
                 </ion-item>

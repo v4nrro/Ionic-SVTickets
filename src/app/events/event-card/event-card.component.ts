@@ -14,7 +14,7 @@ import { close, eye, menu, peopleOutline, personCircleOutline, trash } from 'ion
 
 @Component({
     selector: 'event-card',
-    imports: [IntlCurrencyPipe, DatePipe, RouterLink, IonCard, IonItem, IonIcon, IonLabel, IonButton, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent /* AttendComponent */],
+    imports: [IntlCurrencyPipe, DatePipe, IonCard, IonItem, IonIcon, IonButton, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent /* AttendComponent */],
     templateUrl: './event-card.component.html',
     styleUrl: './event-card.component.css'
 })

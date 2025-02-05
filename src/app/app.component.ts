@@ -5,7 +5,7 @@ import { Platform, IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonM
 import { addIcons } from 'ionicons';
 import { User } from './auth/interfaces/user';
 import { AuthService } from './auth/services/auth.service';
-import { home, logIn, documentText, checkmarkCircle, images, camera, arrowUndoCircle, exit } from 'ionicons/icons';
+import { home, logIn, documentText, checkmarkCircle, images, camera, arrowUndoCircle, exit, add } from 'ionicons/icons';
 import { NavController } from '@ionic/angular';
 
 
@@ -22,9 +22,13 @@ export class AppComponent {
   #nav = inject(NavController);
   #platform = inject(Platform);
 
-  public appPages = [{ title: 'Home', url: '/events', icon: 'home' }];
+  public appPages = [
+        { title: 'Home', url: '/events', icon: 'home' },
+        { title: 'Add event', url: '/events/add', icon: 'add' },
+    ];
+  
   constructor() {
-    addIcons({ home, logIn, documentText, checkmarkCircle, images, camera, arrowUndoCircle, exit, });
+    addIcons({ home, add, logIn, documentText, checkmarkCircle, images, camera, arrowUndoCircle, exit, });
 
     effect(() => {
       if (this.#authService.logged()) {
