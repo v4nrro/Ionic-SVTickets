@@ -1,13 +1,32 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>event-attend</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">event-attend</ion-title>
-    </ion-toolbar>
+<ion-header>
+    <ion-toolbar></ion-toolbar>
   </ion-header>
-</ion-content>
+
+<ion-content class="attend-container">
+    <ion-grid class="ion-text-center">
+      <ion-row class="ion-justify-content-center ion-margin-top">
+        <ion-col size="12">
+          <ion-text color="medium">
+            <h2>Attendees</h2>
+            <ion-icon name="people-outline"></ion-icon>
+            <h1>{{ event()!.numAttend }}</h1>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+  
+      <ion-row class="ion-justify-content-center ion-margin-top">
+        <ion-col size="12">
+          @if(event()!.attend) {
+            <ion-button color="success" expand="full" size="large" class="attend-button" (click)="removeAttend()">
+                I'm going
+            </ion-button>
+          } @else {
+            <ion-button color="danger" expand="full" size="large" class="attend-button" (click)="attend()">
+                I'm not going
+            </ion-button>
+          }
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+  

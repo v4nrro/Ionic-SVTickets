@@ -118,6 +118,7 @@
     <ion-item>
       @if(coordinates()) {
       <ol-map [coordinates]="coordinates()">
+        <ga-autocomplete class="searchBar" (locationChange)="changePlace($event)"></ga-autocomplete>
         <ol-marker [coordinates]="coordinates()"></ol-marker>
       </ol-map>
       }

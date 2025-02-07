@@ -1,0 +1,17 @@
+.full-screen-map {
+    --background: transparent;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+  
+  ol-map {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  

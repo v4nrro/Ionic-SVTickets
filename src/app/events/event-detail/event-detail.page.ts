@@ -24,5 +24,6 @@ export class EventDetailPage  {
     request: () => this.id(),
     loader: ({request: id}) => this.#eventsService.getEvent(id)
   });
+  
   event = computed(() => this.productResource.value());
 }

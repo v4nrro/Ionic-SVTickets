@@ -4,6 +4,7 @@ import { MyEvent, MyEventInsert } from '../interfaces/MyEvent';
 import { EventsResponse, SingleEventResponse } from '../interfaces/responses';
 import { map, Observable } from 'rxjs';
 import { CommentsResponse, UsersResponse } from '../../shared/interfaces/responses';
+import { MyComment } from 'src/app/shared/interfaces/Comments';
 
 @Injectable({
   providedIn: 'root'
@@ -72,8 +73,8 @@ export class EventsService {
         return this.#http.get<UsersResponse>(`${this.#eventsUrl}/${eventId}/attend`);
     }
 
-    postComment(eventId: number, userComment: string) : Observable<void> {
-        return this.#http.post<void>(`${this.#eventsUrl}/${eventId}/comments`, {comment: userComment});
+    postComment(eventId: number, userComment: string) : Observable<MyComment> {
+        return this.#http.post<MyComment>(`${this.#eventsUrl}/${eventId}/comments`, {comment: userComment});
     }
 
     getComments(eventId: number) : Observable<CommentsResponse>{

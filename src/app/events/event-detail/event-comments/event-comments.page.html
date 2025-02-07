@@ -1,13 +1,36 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>event-comments</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">event-comments</ion-title>
-    </ion-toolbar>
+<ion-header>
+    <ion-toolbar></ion-toolbar>
   </ion-header>
+  
+  <ion-content [fullscreen]="true">
+    <ion-refresher #refresher slot="fixed" (ionRefresh)="loadComments(refresher)">
+      <ion-refresher-content>
+      </ion-refresher-content>
+    </ion-refresher>
+
+    @if(event()!.attend){
+        <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+            <ion-fab-button color="secondary" (click)="addComment()">
+              <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+        </ion-fab>
+    }
+
+    <ion-list style="padding-bottom: 50px">
+
+      @for (comment of comments(); track comment.id) {
+        <ion-item>
+          <ion-avatar slot="start">
+            <ion-img [src]="comment.user.avatar"></ion-img>
+          </ion-avatar>
+          <ion-label text-wrap>
+            <p>{{comment.user.name}}</p>
+            <h4>{{comment.comment}}</h4>
+          </ion-label>
+        </ion-item>
+      }
+
+    </ion-list>
+
 </ion-content>
+  

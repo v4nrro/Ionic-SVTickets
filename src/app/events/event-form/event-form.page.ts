@@ -31,7 +31,6 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { EventsService } from '../services/events.service';
-import { ValidationClassesDirective } from 'src/app/shared/directives/validation-classes.directive';
 import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator';
 import { Camera, CameraSource, CameraResultType } from '@capacitor/camera';
 import { SearchResult } from '../../shared/ol-maps/interfaces/search-result';
@@ -67,7 +66,8 @@ import { OlMarkerDirective } from 'src/app/shared/ol-maps/ol-marker.directive';
     FormsModule,
     OlMapDirective,
     OlMarkerDirective,
-  ],
+    GaAutocompleteDirective
+],
 })
 export class EventFormPage implements OnInit {
   #eventsService = inject(EventsService);
@@ -102,6 +102,7 @@ export class EventFormPage implements OnInit {
     this.coordinates.set(result.coordinates);
     this.address.set(result.address);
   }
+
 
   myEvent = {
     title: '',

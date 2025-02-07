@@ -10,4 +10,9 @@
       <ion-title size="large">event-info</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  @if(event()){
+    <event-card [event]="event()!"></event-card>
+  }
+  
 </ion-content>
