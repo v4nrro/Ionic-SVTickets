@@ -27,10 +27,10 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    this.reloadProducts();
+    this.reloadEvents();
   }
 
-  reloadProducts(refresher?: IonRefresher) {
+  reloadEvents(refresher?: IonRefresher) {
     this.page.set(1)
     this.#eventsService
     .getEvents("distance", this.page(), this.searchQuery())
@@ -48,7 +48,7 @@ export class HomePage {
     this.events.update((events) => events.filter((e) => e !== event));
   }
 
-  addProducts(){
+  addEvents(){
     this.#eventsService
     .getEvents("distance", this.page(), "")
     .subscribe((myEvents) => {
@@ -62,7 +62,7 @@ export class HomePage {
 
   onIonInfinite(event: InfiniteScrollCustomEvent) {
     this.page.update((page) => page + 1);
-    this.addProducts();
+    this.addEvents();
     setTimeout(() => {
       event.target.complete();
     }, 600);
@@ -74,6 +74,6 @@ export class HomePage {
 
     this.searchQuery.set(query);
     this.page.set(1);
-    this.reloadProducts();
+    this.reloadEvents();
   }
 }

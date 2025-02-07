@@ -55,7 +55,7 @@ export class EventCardComponent {
                 text: 'Creator page',
                 icon: 'person-circle-outline',
                 handler: () => {
-                    this.#navController.navigateForward(['/users', event.creator.id]);
+                    this.#navController.navigateForward(['/profile', event.creator.id]);
                 },
             },
             {

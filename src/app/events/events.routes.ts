@@ -19,7 +19,7 @@ export const eventsRoutes: Routes = [
           import('./event-detail/event-detail.page').then(
             (m) => m.EventDetailPage
           ),
-        loadChildren: () => // Rutas internas (dentro de product-detail)
+        loadChildren: () => // Rutas internas (dentro de event-detail)
           import('./event-detail/event-detail.routes').then((m) => m.eventDetailRoutes),
     }
 ];

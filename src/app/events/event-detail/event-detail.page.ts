@@ -20,10 +20,10 @@ export class EventDetailPage  {
   }
 
   id = input.required({ transform: numberAttribute });
-  productResource = rxResource({
+  eventResource = rxResource({
     request: () => this.id(),
     loader: ({request: id}) => this.#eventsService.getEvent(id)
   });
   
-  event = computed(() => this.productResource.value());
+  event = computed(() => this.eventResource.value());
 }
