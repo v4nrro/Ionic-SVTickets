@@ -1,31 +1,33 @@
-<ion-card>
-    <img src="{{this.event().image}}" alt="" style="width: 100%;" />
-    <ion-item>
-        <ion-card-title>{{this.event().title}}</ion-card-title>
-        <span slot="end">{{ this.event().numAttend }}</span>
-        <ion-icon name="people-outline" slot="end"></ion-icon>
-    </ion-item>
-    <ion-card-header>
-        {{this.event().description}}
-    </ion-card-header>
-
-    <ion-card-content>
-        <ion-card-subtitle>
-            Date: {{this.event().date | date: "dd/MM/yyyy"}}
-          </ion-card-subtitle>
-          <ion-card-subtitle>
-            Price: {{event().price | intlCurrency:"EUR":"es-ES"}}
-          </ion-card-subtitle>
-          <ion-card-subtitle>
-            Distance: {{event().distance.toFixed(1)}}km
-          </ion-card-subtitle>
-    </ion-card-content>
-
-    <ion-item>
-        <img src="{{this.event().creator.avatar}}" alt="" class="user-icon" style="width: 50px; margin-right: 1rem; margin-bottom: 1rem; border-radius: 50%;"/>
-        <span style="margin-bottom: 1rem;">{{this.event().creator.name}}</span>
-        <ion-button slot="end" fill="clear" color="dark" (click)="showOptions(this.event())">
-            <ion-icon slot="icon-only" name="menu"></ion-icon>
-        </ion-button>
-    </ion-item>
-</ion-card>
+@if(this.event()){
+    <ion-card>
+        <img src="{{this.event().image}}" alt="" style="width: 100%;" />
+        <ion-item>
+            <ion-card-title>{{this.event().title}}</ion-card-title>
+            <span slot="end">{{ this.event().numAttend }}</span>
+            <ion-icon name="people-outline" slot="end"></ion-icon>
+        </ion-item>
+        <ion-card-header>
+            {{this.event().description}}
+        </ion-card-header>
+    
+        <ion-card-content>
+            <ion-card-subtitle>
+                Date: {{this.event().date | date: "dd/MM/yyyy"}}
+              </ion-card-subtitle>
+              <ion-card-subtitle>
+                Price: {{event().price | intlCurrency:"EUR":"es-ES"}}
+              </ion-card-subtitle>
+              <ion-card-subtitle>
+                Distance: {{event().distance.toFixed(1)}}km
+              </ion-card-subtitle>
+        </ion-card-content>
+    
+        <ion-item>
+            <img src="{{this.event().creator.avatar}}" alt="" class="user-icon" style="width: 50px; margin-right: 1rem; margin-bottom: 1rem; border-radius: 50%;"/>
+            <span style="margin-bottom: 1rem;">{{this.event().creator.name}}</span>
+            <ion-button slot="end" fill="clear" color="dark" (click)="showOptions(this.event())">
+                <ion-icon slot="icon-only" name="menu"></ion-icon>
+            </ion-button>
+        </ion-item>
+    </ion-card>
+}

@@ -38,7 +38,10 @@ export class EventCardComponent {
         this.#eventsService
         .deleteEvent(this.event().id!)
         .pipe(takeUntilDestroyed(this.#destroyRef))
-        .subscribe(() => this.deleted.emit());
+        .subscribe(() => {
+            this.deleted.emit();
+            this.#navController.navigateRoot(['/events'])
+        });
     }
 
     async showOptions(event: MyEvent) {
@@ -77,7 +80,7 @@ export class EventCardComponent {
         }
 
         const actSheet = await this.#actionSheetCtrl.create({
-            header: event.description,
+            header: event.title,
             buttons: buttons,
         });
     

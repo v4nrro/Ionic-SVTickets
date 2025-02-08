@@ -1,19 +1,63 @@
 import { Component, inject, signal } from '@angular/core';
-import { IonSearchbar , InfiniteScrollCustomEvent, IonInfiniteScrollContent, IonInfiniteScroll, NavController, ActionSheetController, IonRouterLink, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabButton, IonIcon, IonList, IonItem, IonThumbnail,IonLabel, IonButton } from '@ionic/angular/standalone';
+import {
+  IonSearchbar,
+  InfiniteScrollCustomEvent,
+  IonInfiniteScrollContent,
+  IonInfiniteScroll,
+  NavController,
+  ActionSheetController,
+  IonRouterLink,
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonMenuButton,
+  IonTitle,
+  IonContent,
+  IonRefresher,
+  IonRefresherContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonList,
+  IonItem,
+  IonThumbnail,
+  IonLabel,
+  IonButton,
+} from '@ionic/angular/standalone';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { EventsService } from '../services/events.service';
 import { MyEvent } from '../interfaces/MyEvent';
 import { EventCardComponent } from '../event-card/event-card.component';
 import { addIcons } from 'ionicons';
-import { add } from 'ionicons/icons';
+import { add, menu } from 'ionicons/icons';
 
 @Component({
   selector: 'home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonSearchbar ,IonInfiniteScrollContent, IonInfiniteScroll, EventCardComponent, RouterLink, IonRouterLink, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabButton, IonIcon, IonList]
+  imports: [
+    IonSearchbar,
+    IonButton,
+    IonInfiniteScrollContent,
+    IonInfiniteScroll,
+    EventCardComponent,
+    RouterLink,
+    IonRouterLink,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonMenuButton,
+    IonTitle,
+    IonContent,
+    IonRefresher,
+    IonRefresherContent,
+    IonFab,
+    IonFabButton,
+    IonIcon,
+    IonList,
+  ],
 })
 export class HomePage {
   events = signal<MyEvent[]>([]);
@@ -21,9 +65,11 @@ export class HomePage {
   searchQuery = signal<string>(''); // Stores search term
 
   #eventsService = inject(EventsService);
+  #navController = inject(NavController);
+  #actionSheetCtrl = inject(ActionSheetController);
 
-  constructor(){
-    addIcons({add});
+  constructor() {
+    addIcons({ add, menu });
   }
 
   ionViewWillEnter() {
@@ -31,33 +77,33 @@ export class HomePage {
   }
 
   reloadEvents(refresher?: IonRefresher) {
-    this.page.set(1)
+    this.page.set(1);
     this.#eventsService
-    .getEvents("distance", this.page(), this.searchQuery())
-    .subscribe((myEvents) => {
+      .getEvents('distance', this.page(), this.searchQuery())
+      .subscribe((myEvents) => {
         if (this.page() === 1) {
-            this.events.set(myEvents);
+          this.events.set(myEvents);
         } else {
-            this.events.update((events) => [...events, ...myEvents]);
+          this.events.update((events) => [...events, ...myEvents]);
         }
-      refresher?.complete();
-    });
+        refresher?.complete();
+      });
   }
-  
+
   deleteEvent(event: MyEvent) {
     this.events.update((events) => events.filter((e) => e !== event));
   }
 
-  addEvents(){
+  addEvents() {
     this.#eventsService
-    .getEvents("distance", this.page(), "")
-    .subscribe((myEvents) => {
+      .getEvents('distance', this.page(), '')
+      .subscribe((myEvents) => {
         if (this.page() === 1) {
-            this.events.set(myEvents);
+          this.events.set(myEvents);
         } else {
-            this.events.update((events) => [...events, ...myEvents]);
+          this.events.update((events) => [...events, ...myEvents]);
         }
-    });
+      });
   }
 
   onIonInfinite(event: InfiniteScrollCustomEvent) {

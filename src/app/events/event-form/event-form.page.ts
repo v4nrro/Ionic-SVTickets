@@ -103,7 +103,6 @@ export class EventFormPage implements OnInit {
     this.address.set(result.address);
   }
 
-
   myEvent = {
     title: '',
     description: '',
@@ -117,16 +116,6 @@ export class EventFormPage implements OnInit {
   ngOnInit() {}
 
   addEvent() {
-    console.log(
-      this.myEvent.title,
-      this.myEvent.date,
-      this.myEvent.description,
-      this.myEvent.price,
-      this.imageBase64,
-      this.coordinates()[1],
-      this.coordinates()[0],
-      this.address()
-    );
     this.#eventsService
       .addEvent({
         title: this.myEvent.title,
@@ -140,6 +129,13 @@ export class EventFormPage implements OnInit {
       })
       .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => {
+        this.myEvent = {
+            title: '',
+            description: '',
+            price: 1,
+            date: '',
+        }
+        this.imageBase64 = '';
         this.#router.navigate(['/events']);
       });
   }
