@@ -1,9 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ɵgetInjectableDef } from '@angular/core';
 import {
   IonSearchbar,
   InfiniteScrollCustomEvent,
   IonInfiniteScrollContent,
   IonInfiniteScroll,
+  NavController,
+  ActionSheetController,
   IonRouterLink,
   IonHeader,
   IonToolbar,
@@ -17,8 +19,13 @@ import {
   IonFabButton,
   IonIcon,
   IonList,
+  IonItem,
+  IonThumbnail,
+  IonLabel,
+  IonButton,
 } from '@ionic/angular/standalone';
 import { RouterLink } from '@angular/router';
+import { CurrencyPipe } from '@angular/common';
 import { EventsService } from '../services/events.service';
 import { MyEvent } from '../interfaces/MyEvent';
 import { EventCardComponent } from '../event-card/event-card.component';
@@ -32,6 +39,7 @@ import { add, menu } from 'ionicons/icons';
   standalone: true,
   imports: [
     IonSearchbar,
+    IonButton,
     IonInfiniteScrollContent,
     IonInfiniteScroll,
     EventCardComponent,
@@ -57,6 +65,8 @@ export class HomePage {
   searchQuery = signal<string>(''); // Stores search term
 
   #eventsService = inject(EventsService);
+  #navController = inject(NavController);
+  #actionSheetCtrl = inject(ActionSheetController);
 
   constructor() {
     addIcons({ add, menu });
