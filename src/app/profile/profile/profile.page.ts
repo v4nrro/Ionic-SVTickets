@@ -11,7 +11,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {
   IonContent,
   IonHeader,
@@ -29,7 +34,14 @@ import {
   IonModal,
   IonCol,
   IonGrid,
-  IonRow, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonText, IonInput } from '@ionic/angular/standalone';
+  IonRow,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonText,
+  IonInput,
+} from '@ionic/angular/standalone';
 import { ProfileService } from '../services/profile.service';
 import { User } from 'src/app/auth/interfaces/user';
 import { OlMapDirective } from 'src/app/shared/ol-maps/ol-map.directive';
@@ -38,14 +50,15 @@ import { Camera, CameraSource, CameraResultType } from '@capacitor/camera';
 import { ValueEqualsDirective } from 'src/app/shared/validators/value-equals.directive';
 import { ValidationClassesDirective } from 'src/app/shared/directives/validation-classes.directive';
 import { OverlayEventDetail } from '@ionic/core/components';
-
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [IonInput,  
+  imports: [
+    IonInput,
     IonRow,
     IonGrid,
     IonCol,
@@ -85,12 +98,12 @@ export class ProfilePage implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     name: ['', [Validators.required]],
   });
-  
+
   newAvatar = '';
-  name='';
-  email='';
-  password='';
-  password2='';
+  name = '';
+  email = '';
+  password = '';
+  password2 = '';
 
   constructor() {}
 
@@ -101,7 +114,7 @@ export class ProfilePage implements OnInit {
       this.getMyProfile();
     }
   }
-  
+
   getProfile(id: number) {
     this.#profileService.getProfile(id).subscribe((profile) => {
       this.profile.set(profile);
@@ -111,6 +124,8 @@ export class ProfilePage implements OnInit {
   getMyProfile() {
     this.#profileService.getMyProfile().subscribe((profile) => {
       this.profile.set(profile);
+      this.name = this.profile()!.name;
+      this.email = this.profile()!.email;
       this.coordinates.set([profile.lng, profile.lat]);
     });
   }
@@ -151,7 +166,21 @@ export class ProfilePage implements OnInit {
     this.#changeDetectorRef.markForCheck();
   }
 
-  changeProfile(){
-    
+  changeProfile() {
+    console.log(this.email, this.name);
+    this.#profileService
+      .saveProfile({ email: this.email, name: this.name })
+      .subscribe(() => {
+        this.profile()!.email = this.email;
+        this.profile()!.name = this.name;
+
+        this.#changeDetectorRef.markForCheck();
+      });
+  }
+
+  changePassword() {
+    this.#profileService
+      .savePassword({ password: this.password })
+      .subscribe(() => {});
   }
 }

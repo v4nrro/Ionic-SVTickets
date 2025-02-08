@@ -89,7 +89,7 @@
             </ion-buttons>
           </ion-toolbar>
 
-          <form (ngSubmit)="changeProfile()" #loginForm="ngForm">
+          <form (ngSubmit)="changeProfile()" #profileForm="ngForm">
             <ion-item>
               <ion-input
                 type="email"
@@ -130,6 +130,14 @@
               ></ion-icon>
               }
             </ion-item>
+
+            <ion-button
+              type="submit"
+              color="primary"
+              expand="block"
+              [disabled]="profileForm.invalid"
+              >Edit profile</ion-button
+            >
           </form>
         </ion-content>
       </ng-template>
@@ -150,7 +158,7 @@
             </ion-buttons>
           </ion-toolbar>
 
-          <form (ngSubmit)="changeProfile()" #loginForm="ngForm">
+          <form (ngSubmit)="changePassword()" #passwordForm="ngForm">
             <ion-item>
               <ion-input
                 type="password"
@@ -189,6 +197,14 @@
               ></ion-icon>
               }
             </ion-item>
+
+            <ion-button
+              type="submit"
+              color="primary"
+              expand="block"
+              [disabled]="passwordForm.invalid"
+              >Edit password</ion-button
+            >
           </form>
         </ion-content>
       </ng-template>
