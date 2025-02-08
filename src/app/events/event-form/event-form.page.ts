@@ -7,8 +7,8 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   IonContent,
   IonHeader,
@@ -73,8 +73,8 @@ export class EventFormPage implements OnInit {
   #eventsService = inject(EventsService);
   #destroyRef = inject(DestroyRef);
   #router = inject(Router);
-  #saved = false;
   #changeDetector = inject(ChangeDetectorRef);
+
 
   coordinates = signal<[number, number]>([-0.5, 38.5]);
   address = signal<string>('Prueba');
@@ -116,14 +116,6 @@ export class EventFormPage implements OnInit {
 
   ngOnInit() {}
 
-  //   canDeactivate() {
-  //     if (this.#saved || this.eventForm.pristine) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-
   addEvent() {
     console.log(
       this.myEvent.title,
@@ -148,7 +140,6 @@ export class EventFormPage implements OnInit {
       })
       .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => {
-        this.#saved = true;
         this.#router.navigate(['/events']);
       });
   }
